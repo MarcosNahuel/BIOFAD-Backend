@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Paciente {
+  id              Int       @id @default(autoincrement())
+  dni             String?   @unique
+  apellidoNombre  String    @map("apellido_nombre")
+  fechaNacimiento DateTime? @map("fecha_nacimiento") @db.Date
+  telefono        String?
+  email           String?
+  domicilio       String?
+  obraSocial      String?   @map("obra_social")
+  nroAfiliado     String?   @map("nro_afiliado")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  ordenes         Orden[]
+
+  @@map("pacientes")
+}
+
+model Medico {
+  id             Int      @id @default(autoincrement())
+  matricula      String?
+  nombreCompleto String   @map("nombre_completo")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  ordenes        Orden[]
+
+  @@map("medicos")
+}
+
+model Determinacion {
+  id                Int      @id @default(autoincrement())
+  nbu               String   @unique
+  nombre            String
+  ub                String?
+  metodo            String?
+  esPerfil          Boolean  @default(false) @map("es_perfil")
+  hijosNbu          String?  @map("hijos_nbu")
+  tipoResultado     String   @default("numerico") @map("tipo_resultado")
+  unidadesResultado String?  @map("unidades_resultado")
+  valoresReferencia String?  @map("valores_referencia")
+  opcionesLista     String?  @map("opciones_lista")
+  activo            Boolean  @default(true)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("determinaciones")
+}
+
+model Orden {
+  id                   Int         @id @default(autoincrement())
+  protocolo            String      @unique
+  idPaciente           Int         @map("id_paciente")
+  idMedico             Int?        @map("id_medico")
+  listaDeterminaciones Json?       @map("lista_determinaciones_nbu") @db.JsonB
+  estado               String      @default("Pendiente")
+  fechaCreacion        DateTime    @default(now()) @map("fecha_creacion") @db.Timestamptz
+  fechaActualizacion   DateTime    @default(now()) @updatedAt @map("fecha_actualizacion") @db.Timestamptz
+
+  paciente   Paciente    @relation(fields: [idPaciente], references: [id])
+  medico     Medico?     @relation(fields: [idMedico], references: [id])
+  resultados Resultado[]
+
+  @@map("ordenes")
+}
+
+model Resultado {
+  id         Int       @id @default(autoincrement())
+  idOrden    Int       @map("id_orden")
+  nbu        String
+  valor      String?
+  estado     String    @default("Pendiente")
+  fechaCarga DateTime? @map("fecha_carga") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  orden Orden @relation(fields: [idOrden], references: [id], onDelete: Cascade)
+
+  @@unique([idOrden, nbu])
+  @@map("resultados")
+}
