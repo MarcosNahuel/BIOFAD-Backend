@@ -15,11 +15,11 @@ const PORT = process.env.PORT || 3001;
 // Middleware de seguridad
 app.use(helmet());
 
-// CORS - Configuración para producción (Vercel) y desarrollo local
+// CORS - Configuración para producción y desarrollo
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3002',
-  process.env.CORS_ORIGIN, // URL de Vercel en producción
+  process.env.CORS_ORIGIN, // URL principal (EasyPanel, Vercel, etc.)
 ].filter(Boolean);
 
 app.use(cors({
@@ -27,9 +27,11 @@ app.use(cors({
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
 
-    // Check if origin is allowed or matches Vercel pattern
+    // Check if origin is allowed or matches deployment patterns
     const isAllowed = allowedOrigins.some(allowed =>
-      origin === allowed || origin.endsWith('.vercel.app')
+      origin === allowed ||
+      origin.endsWith('.vercel.app') ||
+      origin.endsWith('.easypanel.host')
     );
 
     if (isAllowed) {
