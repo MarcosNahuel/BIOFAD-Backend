@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import pacientesRouter from './routes/pacientes';
 import ordenesRouter from './routes/ordenes';
 import determinacionesRouter from './routes/determinaciones';
+import portalRouter from './routes/portal';
 import { authMiddleware } from './middleware/auth';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
@@ -54,6 +55,9 @@ app.use(express.json());
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// Rutas API públicas (sin autenticación)
+app.use('/api/portal', portalRouter);
 
 // Rutas API (con autenticación)
 // Comentar authMiddleware temporalmente para desarrollo sin auth
