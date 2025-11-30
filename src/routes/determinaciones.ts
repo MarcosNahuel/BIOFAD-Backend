@@ -1,6 +1,6 @@
 import { Router, Response } from 'express';
-import { supabase } from '../lib/supabase.js';
-import { AuthenticatedRequest, CreateDeterminacionDTO } from '../types/index.js';
+import { supabase } from '../lib/supabase';
+import { AuthenticatedRequest, CreateDeterminacionDTO } from '../types/index';
 
 const router = Router();
 

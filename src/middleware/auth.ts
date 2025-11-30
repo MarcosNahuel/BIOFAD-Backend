@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { createClient } from '@supabase/supabase-js';
-import { AuthenticatedRequest } from '../types/index.js';
+import { AuthenticatedRequest } from '../types/index';
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_ANON_KEY!;

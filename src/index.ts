@@ -3,11 +3,11 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 
-import pacientesRouter from './routes/pacientes.js';
-import ordenesRouter from './routes/ordenes.js';
-import determinacionesRouter from './routes/determinaciones.js';
-import { authMiddleware } from './middleware/auth.js';
-import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import pacientesRouter from './routes/pacientes';
+import ordenesRouter from './routes/ordenes';
+import determinacionesRouter from './routes/determinaciones';
+import { authMiddleware } from './middleware/auth';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
