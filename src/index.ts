@@ -20,6 +20,8 @@ app.use(helmet());
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3002',
+  'http://localhost:3003',
+  'http://localhost:3004',
   process.env.CORS_ORIGIN, // URL principal (EasyPanel, Vercel, etc.)
 ].filter(Boolean);
 
